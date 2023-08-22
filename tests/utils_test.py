@@ -1,10 +1,11 @@
-# test_utils.py
+# utils_test.py
 
 from unittest import TestCase
 from jinja2 import Environment, FileSystemLoader
 
 
 class TryTesting(TestCase):
+
     def test_functor_is_not_mapping_type(self):
 
         functor = lambda ctx: ctx['x'] + ctx['y'],
@@ -59,19 +60,20 @@ class TryTesting(TestCase):
 
     def test_a_right_functor_is_passed(self):
 
+        data = 8
+
         functor = {
             'ctx': {
-                'x': 1,
-                'y': 2,
+                'power': 2,
             },
-            'function': lambda ctx: ctx['x'] + ctx['y'],
+            'function': lambda ctx, elem: elem ** ctx['power'],
         }
 
         j2_template="""
         {%- import 'utils.j2' as utils -%}
-        {{ utils.is_functor(functor) }} - {{ functor.function(functor.ctx) }}"""
+        {{ utils.is_functor(functor) }} - {{ functor.function(functor.ctx, data) }}"""
 
         env = Environment(loader=FileSystemLoader('templates/'))
         t = env.from_string(j2_template)
-        result = t.render(functor=functor)
-        self.assertEqual(result, f'True - {functor["ctx"]["x"] + functor["ctx"]["y"]}')
+        result = t.render(data=data, functor=functor)
+        self.assertEqual(result, f'True - {data ** functor["ctx"]["power"]}')

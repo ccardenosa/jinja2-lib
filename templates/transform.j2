@@ -1,0 +1,15 @@
+{%- import 'utils.j2' as utils -%}
+
+{%- macro transform(in_list, f) -%}
+{%-   set ns = namespace(l = []) -%}
+{%-   if utils.is_functor(f) == 'True' -%}
+{%-     for item in in_list -%}
+{%-       set ns.l = ns.l + [ f.function(f.ctx, item) ] -%}
+{%-     endfor -%}
+{%-   else -%}
+{%-     for item in in_list -%}
+{%-       set ns.l = ns.l + [ f(item) ] -%}
+{%-     endfor -%}
+{%-   endif -%}
+{{    ns.l }}
+{%- endmacro -%}
