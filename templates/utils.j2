@@ -1,0 +1,3 @@
+{%- macro is_functor(f) -%}
+{{ f is mapping and 'function' in f and f.function is callable and 'ctx' in f }}
+{%- endmacro -%}
